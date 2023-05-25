@@ -1,0 +1,100 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet"/>
+
+<style>
+	.map {
+		height: 500px;
+	}
+	#info {
+		display: table;
+		position: relative;
+		margin: 0px auto;
+		word-wrap: anywhere;
+		white-space: pre-wrap;
+		padding: 10px;
+		border: none;
+		border-radius: 3px;
+		font-size: 12px;
+		text-align: center;
+		color: #222;
+		background: #fff;
+	}
+</style>
+
+<div class="container">
+	<div class="infoform mb-5">
+		<form method="POST">
+			{% csrf_token %}
+			<div class="d-flex border-bottom pb-4">
+                <a href="{% url 'markers' profile_id 1 %}" class="mr-3 align-self-center" style="color: black;"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg></a>
+                {% if object.name != None %}
+                    <h2>Updating "{{ object.name }}"</h2>
+                {% else %}
+                    <h2>Add Event</h2>
+                {% endif %}
+           </div>
+			<fieldset class="form-group pt-4">
+				{{ form | crispy }}
+			</fieldset>
+			<div id="map" class="map mb-3"></div>
+			<pre id="info"></pre>
+            <div class="mt-4 d-flex">
+				<button class="btn add-btn mr-auto" type="submit">Post</button>
+                <a class="btn neg-btn" href="{% url 'markers' profile_id 1 %}">Cancel</a>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoiamx0c2FuZyIsImEiOiJjbGVpODE2bDAwdzh1M3ZsZGVyM2RwM3NkIn0.tqAoS6z_fUkuy6BTdA3XJA';
+	/**
+	* Add the map to the page
+	*/
+	const map = new mapboxgl.Map({
+		container: 'map',
+		style: 'mapbox://styles/mapbox/streets-v12',
+		center: [{{ active_profile.longitude }}, {{ active_profile.latitude }}],
+		zoom: 18,
+		pitch: 40,
+		bearing: 20,
+		antialias: true,
+	});
+
+	map.addControl(new mapboxgl.ScaleControl({maxWidth:100}));
+
+	map.on('mousemove', (e) => {
+		document.getElementById('info').innerHTML =
+		// `e.point` is the x, y coordinates of the `mousemove` event
+		// relative to the top-left corner of the map.
+		JSON.stringify(e.point) +
+		'<br />' +
+		// `e.lngLat` is the longitude, latitude geographical position of the event.
+		JSON.stringify(e.lngLat.wrap());
+	});
+
+	const lng = document.getElementById('id_longitude');
+	const lat = document.getElementById('id_latitude');
+	
+	var marker = new mapboxgl.Marker().setLngLat([lng.value, lat.value]).addTo(map);
+
+	function add_marker (e) {
+		var coordinates = e.lngLat;
+		lng.value = coordinates.lng;
+		lat.value = coordinates.lat;
+		console.log('Lng:', coordinates.lng, 'Lat:', coordinates.lat);
+		marker.setLngLat(coordinates).addTo(map);
+
+	}
+
+	map.on('click', add_marker);
+
+</script>
+
+{% endblock content %}

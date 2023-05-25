@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/main.css'%}">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	{% if title %}
+		<title>{{ active_profile.school_name }} - {{ title }}</title>
+	{% else %}
+		<title>{{ active_profile.school_name }} </title>
+	{% endif %}
+</head>
+<body class="mainsite">
+	<main role="main">
+		<header class="site-header sticky-top mb-5">
+		<nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap navbar navbar-expand-md navbar-dark bg-primary px-5">
+			<a class="navbar-brand fa fa-home" href="{% url 'portal' %}"></a>
+			<a class="navbar-brand" href="{% url 'main-index' profile_id %}">{{ active_profile.school_name }}</a>
+
+			<div class="mx-auto"></div>
+
+			<div class="navbar-nav">
+				{% if title != 'Menu' %}
+					{% if title == 'Home' %}
+						<a class="nav-item nav-link active px-3" href="{% url 'main-index' profile_id %}">Home</a>
+					{% else %}
+						<a class="nav-item nav-link px-3" href="{% url 'main-index' profile_id %}">Home</a>
+					{% endif %}
+					{% if title == 'Process Guides' or title == 'Course List' or title == 'Scholarships' or title == "Information"%}
+						{% if toggles.processguides_toggle == True or toggles.courses_toggle == True or toggles.scholarships_toggle == True%}
+						<a class="nav-item dropdown">
+							<div class="btn-group" role="group" style="margin: 0px; padding: 0px">
+							<a class="nav-link active dropdown-toggle px-3" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+								Information
+							</a>
+							<ul class="dropdown-menu">
+								{% if toggles.processguides_toggle == True %}
+								<li><a class="dropdown-item" href="{% url 'processguides' profile_id %}">Process Guides</a></li>
+								{% endif %}
+								{% if toggles.courses_toggle == True %}
+								<li><a class="dropdown-item" href="{% url 'courses' profile_id %}">Courses</a></li>
+								{% endif %}
+								{% if toggles.scholarships_toggle == True %}
+								<li><a class="dropdown-item" href="{% url 'scholarships' profile_id %}">Scholarships</a></li>
+								{% endif %}
+							</ul>
+							</div>
+						</a>
+						{% endif %}
+					{% else %}
+						{% if toggles.processguides_toggle == True or toggles.courses_toggle == True or toggles.scholarships_toggle == True%}
+						<a class="nav-item dropdown">
+							<div class="btn-group" role="group" style="margin: 0px; padding: 0px">
+								<a class="nav-link dropdown-toggle px-3" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+									Information
+								</a>
+								<ul class="dropdown-menu">
+									{% if toggles.processguides_toggle == True %}
+									<li><a class="dropdown-item" href="{% url 'processguides' profile_id %}">Process Guides</a></li>
+									{% endif %}
+									{% if toggles.courses_toggle == True %}
+									<li><a class="dropdown-item" href="{% url 'courses' profile_id %}">Courses</a></li>
+									{% endif %}
+									{% if toggles.scholarships_toggle == True %}
+									<li><a class="dropdown-item" href="{% url 'scholarships' profile_id %}">Scholarships</a></li>
+									{% endif %}
+								</ul>
+								</div>
+						</a>
+						{% endif %}
+					{% endif %}
+					{% if toggles.markers_toggle == True %}
+						{% if title == 'Markers' %}
+						<a class="nav-item nav-link active px-3" href="{% url 'markers' profile_id 1 %}">Events/Places</a>
+						{% else %}
+							<a class="nav-item nav-link px-3" href="{% url 'markers' profile_id 1 %}">Events/Places</a>
+						{% endif %}
+					{% endif %}
+					{% if toggles.chatbot_toggle == True %}
+						{% if title == 'Chatbot' %}
+							<a class="nav-item nav-link active px-3" href="{% url 'chatbot' profile_id %}">Chatbot</a>
+						{% else %}
+							<a class="nav-item nav-link px-3" href="{% url 'chatbot' profile_id %}">Chatbot</a>
+						{% endif %}
+					{% endif %}
+					{% if toggles.web_analytics_toggle == True and user.is_authenticated %}
+						<a class="nav-item nav-link px-3" href="{% url 'analytics' profile_id %}">Website Analytics</a>
+					{% endif %}
+				{% endif %}
+			</div>
+
+			<div class="mx-auto"></div>
+
+			<div class="navbar-nav">
+				{% if user.is_authenticated %}
+					<a class="nav-item nav-link px-3 {% if title == 'Settings' %} active {% endif %}" href="{% url 'settings' profile_id toggles.id %}">Settings</a>
+					<a class="nav-item nav-link px-3" href="{% url 'logout' %}">Logout</a>
+					<a class="nav-item nav-link px-3 {% if title == 'Stats' %} active {% endif %}" href="{% url 'ssr-index' profile_id %}">Stats</a>
+				{% else %}
+					<a class="nav-item nav-link px-3" href="{% url 'login' %}">Login</a>
+					<a class="nav-item nav-link px-3" href="{% url 'ssr-create' profile_id %}">Feedback</a>
+				{% endif %}
+				<a class="nav-item nav-link px-3 {% if title == 'About' %} active {% endif %}" href="{% url 'profile' profile_id %}">About</a>
+			</div>
+			</div>
+		</nav>
+		</header>
+		  {% if messgaes %}
+		  	{% for message in messages %}
+		  		<div class="alert alert-{{ message.tags }}">
+		  			{{ message }}
+		  		</div>
+		  	{% endfor %}
+		  {% endif %}
+	      {% block content %}{% endblock %}
+	</main>
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="{% static 'analytics/time_tracking.js' %}"></script>
+
+</body>
+</html>

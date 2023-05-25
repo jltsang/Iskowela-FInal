@@ -1,0 +1,92 @@
+version: "3.1"
+
+stories:
+
+# 1. General 
+- story: greet
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_how_can_i_help
+
+- story: ambiguous what can you do
+  steps:
+  - action: utter_how_can_i_help
+  - intent: what_can_you_do
+  - action: utter_all_list_my_capabilities
+
+- story: list scholarships
+  steps:
+  - action: utter_how_can_i_help
+  - intent: list_scholarships
+  - action: utter_list_scholarships
+  - action: action_list_scholarships
+
+- story: list processes
+  steps:
+  - action: utter_how_can_i_help
+  - intent: list_processes
+  - action: utter_list_processes
+  - action: action_list_processes
+
+- story: list colleges
+  steps:
+  - action: utter_how_can_i_help
+  - intent: list_colleges
+  - action: utter_list_colleges
+  - action: action_list_colleges
+
+- story: describe scholarship
+  steps:
+  - intent: describe_scholarship
+  - action: utter_describe_scholarship
+  - action: action_describe_scholarship
+  - action: action_reset_slots
+
+- story: describe process
+  steps:
+  - intent: describe_process
+  - action: utter_describe_process
+  - action: action_describe_process
+  - action: action_reset_slots
+
+- story: list courses
+  steps:
+  - intent: list_courses
+  - action: utter_list_courses
+  - action: action_list_courses
+  - action: action_reset_slots
+
+- story: apply
+  steps:
+  - intent: apply
+  - action: utter_apply
+  - action: action_apply
+
+- story: list places
+  steps:
+  - intent: list_places
+  - action: utter_list_places
+  - action: action_list_places
+  - action: action_reset_slots
+
+- story: list places by type
+  steps:
+  - intent: list_places_by_type
+  - action: utter_list_places_by_type
+  - action: action_list_places_by_type
+  - action: action_reset_slots
+
+- story: describe place
+  steps:
+  - intent: describe_place
+  - action: utter_describe_place
+  - action: action_describe_place
+  - action: action_reset_slots
+
+- story: list_events
+  steps:
+  - intent: list_events
+  - action: utter_list_events
+  - action: action_list_events
+  - action: action_reset_slots

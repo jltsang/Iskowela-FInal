@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+	<div class="infoform">
+        <form method="POST"> 
+            {% csrf_token %} 
+            <div class="d-flex border-bottom pb-4">
+                <a href="{% url 'processguides' profile_id %}" class="mr-3 align-self-center" style="color: black;"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg></a>
+                {% if object.process_name != None %}
+                    <h2>Updating "{{ object.process_name }}"</h2>
+                {% else %}
+                    <h2>New Process</h2>
+                {% endif %}
+            </div>
+			<div class="pt-4">{{ form | crispy }} </div>
+            <div class="mt-4 d-flex">
+                <input type="submit" value="Save Changes" class="btn add-btn mr-auto"> 
+                <a class="btn neg-btn" href="{% url 'processguides' profile_id %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock content %}

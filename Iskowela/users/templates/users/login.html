@@ -1,0 +1,47 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+      <link rel="stylesheet" type="text/css" href="{% static 'main/main.css'%}">
+
+    {% if title %}
+      <title>Roosevelt College - {{ title }}</title>
+    {% else %}
+      <title>Roosevelt College</title>
+    {% endif %}
+  </head>
+<body class="login">
+  <div class="flex-fill">
+    <div class="d-flex ml-4 mt-4">
+      <a href="/" class="align-self-center mr-3" style="color: white;"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+      </svg></a>
+      <h1>Iskowela</h1>
+    </div>
+  </div>
+  <div class="text-center align-self-center">
+  		<form method="POST">
+  			{% csrf_token %}
+  			<fieldset class="form-group">
+  				<div class="mb-4">Log into your account to continue.</div>
+  				{{ form | crispy }}
+  			</fieldset>
+  			 <div class="form-group">
+                <button class="btn btn-light btn-outline-primary btn-block" type="submit">Login</button>
+            </div>
+  		</form>
+      <!-- Uncomment this area for new admin account -->
+      
+  </div>
+  <div class="flex-fill"></div>
+</body>
+</html>

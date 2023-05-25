@@ -1,0 +1,25 @@
+{
+  "lookup": {
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFEpLSlKL4jPyy+OTE/PiM+MzUnMKamtjAWckFfs=": "action_listen",
+    "eJyFi0EKwCAMBL/iA/oCv1JKEAk1kEbR2B4kf6+lvfe2s8yswxY3SsUTQlTK4t14B0g40LuuihVSviAGAYKEXOyn+YCpKcp0e8M6HZKJ6t3zQ8zMuGMz2249sTMh": "utter_list_colleges",
+    "eJyFjVEKwCAMQ6/SA+wEXmWMIlJmwVXRun2Id59j+9mXf0l4SdbWF2gp04nWKUcx0F6BYg8yUFUpo48XOivI6CmkPul8JnBRksHWQnkwLMOqgSdHF0Ogncps6/3/V2aL2w2xWlLX": "action_list_colleges",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFEpLSlKL4jPyy+OTE/PiM+MzUnMKagnogXJyMotLUvOAakuLU4uAajLzgNwSKwWQeHxyfk5OanpqMSGzIPajaqHMRCTXEW9kLAC7N3LX": "action_listen",
+    "eJyFi0EKgDAMBL+SB/iCfkUklBJoQNOSpHoo/bsVvXvbWWbWPhboVenEmJyLBOjvQIkHBWjupJjLhSkKMmba6/hpPtjZnGS6zUinwzLRAzw/Vi2JzMjG2G5yMzOq": "utter_list_processes",
+    "eJyFjlEKwCAMQ6/iAXYCrzJGESkouCpt3T7Eu8/hvvbjXxJeQvbWN9MK4wXOa8xkTZsCyJ1oTVVFhpBv8I4gQsBU+qLzmRRFkQZbBXkwkYZVa94cCmePIiirsXng11luHg/AvVRy": "action_list_processes",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFEpLSlKL4jPyy+OTE/PiM+MzUnMKagnogXJyMotLUvOAakuLU4uAajLzgNwSKwWQeHxBUX5yanFxajEhwyAOQNNDoZlIDiTF0FgAQQ11hA==": "action_listen",
+    "eJyLrq6NBQAEOAGx": "action_listen",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohJbU4uSgzKTW+ODkjPyexqDgjs6C2NhYAtW8hrg==": "scholarship_form",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohJbU4uSgzKTW+ODkjPyexqDgjs6CWgJFISuPT8otyiTU1FgCTK0Ly": "utter_describe_scholarship",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohJbU4uSgzKTW+ODkjPyexqDgjs6CWgJFISuPT8otyqWNqaUlJalE8Vp1Emh8LAKndaFY=": "action_describe_scholarship",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohJbU4uSgzKTW+ODkjPyexqDgjs6CWgJFISuPT8otyqWNqaUlJalE8Vp1UMR/KocSCWABNvo4E": "action_reset_slots",
+    "eJy1jUEKhDAMRa/SA3iCXkUk1PoHA7WVJLop3n0K42IWwsxCd3nw/ktfj87VVbBTiMYle1c/B+WwwLsTEqshN3dTSHM4NzTvJmgUHkEa55KC6Mzr8SP5pdKryHJPdTOD0OXylv4Jjz8QKIw0FdN/u8Mb9hKwKQ==": "action_listen",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohvSg1taS2NhYA6dwbhQ==": "utter_greet",
+    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohvSg1taSWgBmlJSWpRfEQpbhMiAUAQvc0lw==": "utter_how_can_i_help",
+    "eJyljEEKgCAQAL+yD+gFfiViEVlSsFXWtQ7i3xPsGh26zcAwa+sLtCx0onUaEhtoE5DtQQYeiaEo8WhrIRlN4KFqYBci7R+PqkqCM/1z8OlCZxkDeor5dbXd5c1RQQ==": "action_listen",
+    "eJyFjFEKgCAQBa+yB+gEXiViWWxBwVbRNQnx7kn1398bmHlrHwv0lPlEsuqjGOjvQKGDDVRVzuhiQ0uCHh2HNH6aD4IvyjLdWjhPx8tENdAc6fN2xYp7HGO7AaRiM+s=": "utter_all_list_my_capabilities",
+    "eJyNjlEKhDAMRK/SA+wJepVFQuwGGohpaVNFinffov7r3wzMe8y3Hx/Xc6EVMBgn9a5fARQX8q6ZUYGYNgiowBBJ8vHA3EW4GunYtkplbFhHNe+2iHba9tTgl55s1wMUOYWw7IPNOLOwMdUX+ukPw81Y5A==": "action_listen",
+    "eJyFi0EKgDAMBL/SB/iCfkUklBJIoKaliXoo+bsVvXvbWWbW4UsYreMJKRtXiWG8AyTtGMNhhh2oXpCTAANhaf7TfFBYDWW6h2KfDstEi+H5QTPVkroSN3Xfbg7wNOY=": "utter_list_scholarships",
+    "eJyNjlEKwCAMQ6/iAXYCrzJGESlYcFVs3T7Eu8/h/vax/SXhJWRtfTEtFzzAeaXE1rQpgN2O1lRVLBDSCd4xEASMuX90HhNJFHmwVbAMhnhYtebOQXxI0RUJlOVrb3541/4sbxfRP1gm": "action_list_scholarships",
+    "eJyljlEKgDAMQ6+yA3iCXUWkjFFYYXZj7fRjeHcn+iH4IeJfEpJHxrYNpuWCCzivlNiadgpgN6M1VRULhLSCdwwEAWPeXjaXiSSK3LtVsPQOcbdqzZGD+JCiKxIoyxvv/PCc/Sffnn5HTzttwnuw": "action_listen"
+  }
+}

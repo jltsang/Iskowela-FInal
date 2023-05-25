@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-scholarship_name",
+      "2": "I-scholarship_name",
+      "3": "L-scholarship_name",
+      "4": "U-scholarship_name",
+      "5": "B-school",
+      "6": "I-school",
+      "7": "L-school",
+      "8": "U-school",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-scholarship_name": 1,
+      "I-scholarship_name": 2,
+      "L-scholarship_name": 3,
+      "U-scholarship_name": 4,
+      "B-school": 5,
+      "I-school": 6,
+      "L-school": 7,
+      "U-school": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]

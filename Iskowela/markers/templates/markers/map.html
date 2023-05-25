@@ -1,0 +1,795 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet"/>
+
+    {{user.is_authenticated | json_script:"user_auth"}}
+    {{mtype | json_script:"mtype"}}
+    {{profile_id | json_script:"profile"}}
+
+    <style>
+        .sidebar {
+        position: absolute;
+        width: 30%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        padding-top: 75px;
+        overflow: hidden;
+        border-right: 1px solid rgba(0, 0, 0, 0.25);
+        }
+
+        .map {
+        position: absolute;
+        left: 0;
+        width: 70%;
+        top: 0;
+        bottom: 0;
+        }
+ 
+        .listings {
+        height: 75%;
+        overflow: auto;
+        border-top: 2px solid #eee;
+        border-bottom: 2px solid #eee;
+        padding: 10px;
+        }
+ 
+        .listings #type-filter {
+            
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            color: #333;
+            font-size: 16px;
+            height: 40px;
+            padding: 8px 10px;
+            width: 200px;
+        }
+
+        .listings #type-filter option {
+            color: #333;
+            font-size: 16px;
+        }
+
+        .listings .item {
+        display: block;
+        border-bottom: 1px solid #eee;
+        padding: 10px;
+        text-decoration: none;
+        padding-left: 5%;
+        }
+        
+        .listings .item:last-child {
+        border-bottom: none;
+        }
+
+        .listings .item .title {
+        display: block;
+        color: #007BFF;
+        font-weight: 700;
+        font-size: larger;
+        }
+        
+        .listings .item .title small {
+        font-weight: 400;
+        }
+        .listings .item.active .title,
+        .listings .item .title:hover {
+        color: #00853e;
+        }
+        .listings .item.active {
+        background-color: #f8f8f8;
+        }
+        ::-webkit-scrollbar {
+        width: 3px;
+        height: 3px;
+        border-left: 0;
+        background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-track {
+        background: none;
+        }
+        ::-webkit-scrollbar-thumb {
+        background: #0067d4;
+        border-radius: 0;
+        }
+
+        .cntr {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 5%;
+        }
+    
+        /* Marker tweaks */
+        .mapboxgl-popup-close-button {
+        display: none;
+        }
+
+        .mapboxgl-popup-content {
+        padding: 0;
+        }
+
+        .mapboxgl-popup-content h6 {
+        background: #007BFF;
+        color: #ffff;
+        padding: 10px;
+        padding-right: 20px;
+        border-radius: 3px 3px 0 0;
+        font-weight: 700;
+        }
+
+        .mapboxgl-popup-content p {
+        margin: 0;
+        padding: 0 10px 10px 10px ;
+        font-weight: 400;
+        }
+
+        .mapboxgl-popup {
+        padding-bottom: 15px;
+        }
+
+    </style>
+
+    <div id="map" class="map"></div>
+    <div class="sidebar">
+        <div class="cntr pb-2">
+            
+            <a class="btn btn-primary {% if mtype == 1 %}disabled{% endif %}" href="{% url 'markers' profile_id 1 %}">Events</a>
+            <a class="btn btn-primary {% if mtype == 2 %}disabled{% endif %}" href="{% url 'markers' profile_id 2 %}">Places</a>
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary {% if mtype == 3 %} disabled {% endif %}" href="{% url 'markers' profile_id 3 %}">Suggestions</a>
+            {% endif %}
+        </div>
+        <div id="listings" class="listings">
+            <div>
+                <select id="type-filter">
+                    <optgroup label="Default">
+                        <option value="all">All</option>
+                        {% if mtype == 3 %}
+                            <option value="event">Events</option>
+                            <option value="place">Places</option>
+                        {% endif %}
+                    </optgroup>
+                    {% if mtype == 1 %}
+                        <optgroup label="Event Filters">
+                            {% for type, display_name in event_types %}
+                                <option value="{{ display_name }}">{{ display_name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% elif mtype == 2 %}
+                        <optgroup label="Place Filters">
+                            {% for type, display_name in place_types %}
+                                <option value="{{ display_name }}">{{ display_name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% elif mtype == 3 %}
+                        <optgroup label="Event Filters">
+                            {% for type, display_name in event_types %}
+                                <option value="{{ display_name }}">{{ display_name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                        <optgroup label="Place Filters">
+                            {% for type, display_name in place_types %}
+                                <option value="{{ display_name }}">{{ display_name }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+        <div class="cntr pt-4">
+            {% if mtype ==  1 and user.is_authenticated %}
+                <a class="btn btn-primary" href="{% url 'event-create' profile_id %}">Add Event</a>
+            {% elif mtype ==  2 and user.is_authenticated %}
+                <a class="btn btn-primary" href="{% url 'place-create' profile_id %}">Add Location</a>
+            {% elif mtype ==  1 %}
+                <a class="btn btn-primary" href="{% url 'suggest-event' profile_id %}">Suggest Event</a>
+            {% elif mtype == 2 %}
+                <a class="btn btn-primary" href="{% url 'suggest-place' profile_id %}">Suggest Location</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary" href="{% url 'pupdate' profile_id %}">Set Center</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoiamx0c2FuZyIsImEiOiJjbGVpODE2bDAwdzh1M3ZsZGVyM2RwM3NkIn0.tqAoS6z_fUkuy6BTdA3XJA';
+        /**
+        * Add the map to the page
+        */
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [{{ active_profile.longitude }}, {{ active_profile.latitude }}],
+            zoom: 18,
+            pitch: 40,
+            bearing: 20,
+            antialias: true,
+        });
+
+        map.addControl(new mapboxgl.ScaleControl({maxWidth:100}));
+
+        const auth = JSON.parse(document.getElementById('user_auth').textContent);
+        const profile_id = JSON.parse(document.getElementById('profile').textContent);
+        let type = JSON.parse(document.getElementById('mtype').textContent);
+        const typeFilter = document.getElementById('type-filter');
+        let chosenTypes = [];
+
+        if (type == 1) {
+            const stores = {
+                'type': 'FeatureCollection',
+                'features': [
+                    {% for instance in events %}
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [{{ instance.longitude }}, {{ instance.latitude }}]
+                        },
+                        'properties': {
+                            'db_id': '{{ instance.id }}',
+                            'title': '{{ instance.name }}',
+                            'type': '{{ instance.get_type_display }}',
+                            'date': '{{ instance.event_date }}',
+                            'description': '{{ instance.description }}',
+                        }
+                    },     
+                    {% endfor %}
+                ]
+            };
+                
+            /**
+            * Assign a unique id to each store. You'll use this `id`
+            * later to associate each point on the map with a listing
+            * in the sidebar.
+            */
+            stores.features.forEach((store, i) => {
+                store.properties.id = i;
+            });
+    
+            /**
+            * Wait until the map loads to make changes to the map.
+            */
+            map.on('load', () => {
+                /**
+                * This is where your '.addLayer()' used to be, instead
+                * add only the source without styling a layer
+                */
+                
+                map.addSource('places', {
+                'type': 'geojson',
+                'data': stores
+                });
+                
+            
+                /**
+                * Add all the things to the page:
+                * - The location listings on the side of the page
+                * - The markers onto the map
+                */
+                buildLocationList(stores);
+                addMarkers(stores);
+            });
+
+            typeFilter.addEventListener('change', function() {
+                if (typeFilter.value === 'all') {
+                    // Show all types
+                    chosenTypes = [];
+                } else {
+                    // Only show selected types
+                    chosenTypes = [typeFilter.value];
+                }
+
+                // Update the map with the new filter
+                updateMap(stores, chosenTypes);
+            });
+        }
+        else if (type == 2) {
+            const stores = {
+                'type': 'FeatureCollection',
+                'features': [
+                    {% for place in places %}
+                    {
+                        'type': 'Feature',
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [{{ place.longitude }}, {{ place.latitude }}]
+                        },
+                        'properties': {
+                            'db_id': '{{ place.id }}',
+                            'title': '{{ place.name }}',
+                            'type': '{{ place.get_type_display }}',
+                            'description': '{{ place.description }}',
+                        }
+                    },     
+                    {% endfor %}
+                ]
+            };
+                
+            /**
+            * Assign a unique id to each store. You'll use this `id`
+            * later to associate each point on the map with a listing
+            * in the sidebar.
+            */
+            stores.features.forEach((store, i) => {
+                store.properties.id = i;
+            });
+    
+            /**
+            * Wait until the map loads to make changes to the map.
+            */
+            map.on('load', () => {
+                /**
+                * This is where your '.addLayer()' used to be, instead
+                * add only the source without styling a layer
+                */
+                
+                map.addSource('places', {
+                'type': 'geojson',
+                'data': stores
+                });
+                
+            
+                /**
+                * Add all the things to the page:
+                * - The location listings on the side of the page
+                * - The markers onto the map
+                */
+                buildLocationList(stores);
+                addMarkers(stores);
+            });
+
+            typeFilter.addEventListener('change', function() {
+                if (typeFilter.value === 'all') {
+                    // Show all types
+                    chosenTypes = [];
+                } else {
+                    // Only show selected types
+                    chosenTypes = [typeFilter.value];
+                }
+
+                // Update the map with the new filter
+                updateMap(stores, chosenTypes);
+            });
+        }
+
+        else if (type == 3 && auth) {
+            const stores = {
+                'type': 'FeatureCollection',
+                'features': [
+                {% for instance in event_suggestions %}
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [{{ instance.longitude }}, {{ instance.latitude }}]
+                    },
+                    'properties': {
+                        'db_id': '{{ instance.id }}',
+                        'title': '{{ instance.name }}',
+                        'marker': '{{ instance.event_marker.id }}',
+                        'typeno': '{{ instance.type }}',
+                        'type': '{{ instance.get_type_display }}',
+                        'date': '{{ instance.event_date }}',
+                        'dateformatted': '{{ instance.event_date | date:"Y-m-d\TH:i" }}',
+                        'cud': '{{ instance.get_cud_display }}',
+                        'description': '{{ instance.description }}',
+                        'mtype': 'event',
+                    }
+                },     
+                {% endfor %}
+                {% for place in place_suggestions %}
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [{{ place.longitude }}, {{ place.latitude }}]
+                    },
+                    'properties': {
+                        'db_id': '{{ place.id }}',
+                        'title': '{{ place.name }}',
+                        'marker': '{{ place.place_marker.id }}',
+                        'typeno': '{{ place.type }}',
+                        'type': '{{ place.get_type_display }}',
+                        'cud': '{{ place.get_cud_display }}',
+                        'description': '{{ place.description }}',
+                        'mtype': 'place',
+                    }
+                },     
+                {% endfor %}
+                ]
+            };
+                
+            /**
+            * Assign a unique id to each store. You'll use this `id`
+            * later to associate each point on the map with a listing
+            * in the sidebar.
+            */
+            stores.features.forEach((store, i) => {
+                store.properties.id = i;
+            });
+    
+            /**
+            * Wait until the map loads to make changes to the map.
+            */
+            map.on('load', () => {
+                /**
+                * This is where your '.addLayer()' used to be, instead
+                * add only the source without styling a layer
+                */
+                
+                map.addSource('places', {
+                'type': 'geojson',
+                'data': stores
+                });
+                
+                /**
+                * Add all the things to the page:
+                * - The location listings on the side of the page
+                * - The markers onto the map
+                */
+                buildLocationList(stores);
+                addMarkers(stores);
+            });
+
+            typeFilter.addEventListener('change', function() {
+                if (typeFilter.value === 'all') {
+                    // Show all types
+                    chosenTypes = [];
+                } else {
+                    // Only show selected types
+                    chosenTypes = [typeFilter.value];
+                }
+
+                // Update the map with the new filter
+                updateMap(stores, chosenTypes);
+            });
+        }
+ 
+        /**
+        * Add a marker to the map for every store listing.
+        **/
+        function addMarkers(stores) {
+            /* For each feature in the GeoJSON object above: */
+            for (const marker of stores.features) {
+                if (marker.properties.type != 'Online'){
+                    /* Create a div element for the marker. */
+                    const el = document.createElement('div');
+                    /* Assign a unique `id` to the marker. */
+                    el.id = `marker-${marker.properties.id}`;
+                    /* Assign the `marker` class to each marker for styling. */
+                    switch(marker.properties.type) {
+                        case 'Health':
+                            el.className = 'marker-health'; 
+                            break;
+                        case 'Food':
+                            el.className = 'marker-food';
+                            break;
+                        case 'Finance':
+                            el.className = 'marker-finance';
+                            break;
+                        case 'Store':
+                            el.className = 'marker-store';
+                            break;
+                        default:
+                            el.className = 'marker-info';
+                            break;
+                    }
+
+                    /**
+                    * Create a marker using the div element
+                    * defined above and add it to the map.
+                    **/
+                    new mapboxgl.Marker(el)
+                    .setLngLat(marker.geometry.coordinates)
+                    .addTo(map);
+                
+                    /**
+                    * Listen to the element and when it is clicked, do three things:
+                    * 1. Fly to the point
+                    * 2. Close all other popups and display popup for clicked store
+                    * 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                    **/
+                    el.addEventListener('click', (e) => {
+                        /* Fly to the point */
+                        flyToStore(marker);
+                        /* Close all other popups and display popup for clicked store */
+                        createPopUp(marker);
+                        /* Highlight listing in sidebar */
+                        const activeItem = document.getElementsByClassName('active');
+                        e.stopPropagation();
+                        if (activeItem[0]) {
+                            activeItem[0].classList.remove('active');
+                        }
+                        const listing = document.getElementById(`listing-${marker.properties.id}`);
+                        listing.classList.add('active');
+                    });
+                }
+            }
+        }
+        
+        /**
+        * Add a listing for each store to the sidebar.
+        **/
+        function buildLocationList(stores) {
+            for (const store of stores.features) {
+                /* Add a new listing section to the sidebar. */
+                const listings = document.getElementById('listings');
+                const listing = listings.appendChild(document.createElement('div'));
+                /* Assign a unique `id` to the listing. */
+                listing.id = `listing-${store.properties.id}`;
+                /* Assign the `item`    class to each listing for styling. */
+                listing.className = 'item ';
+
+                const cud = listing.appendChild(document.createElement('div'));
+                store.properties.cud == undefined ? cud.innerHTML += `` : cud.innerHTML += `${store.properties.cud}`;
+
+                /* Add the link to the individual listing created above. */
+                const link = listing.appendChild(document.createElement('a'));
+                link.href = '#';
+                link.className = 'title';
+                link.id = `link-${store.properties.id}`;
+                link.innerHTML = `${store.properties.title}`;
+
+
+                /* Add details to the individual listing. */
+                const details = listing.appendChild(document.createElement('div'));
+                store.properties.date == undefined ? details.innerHTML += `` : details.innerHTML += `${store.properties.date} &middot; `;
+                details.innerHTML += `${store.properties.type}`;
+
+                const desc = listing.appendChild(document.createElement('div'));
+                desc.innerHTML = `${store.properties.description}`;
+
+                if(auth){
+                    if (type != 3) {
+                        const edit = listing.appendChild(document.createElement('a'));
+                        edit.href = "#";
+                        edit.setAttribute("db_id", store.properties.db_id);
+                        edit.setAttribute("ep", store.properties.date ? 1 : 0);
+                        edit.className = 'btn add-btn mt-2 mr-2';
+                        edit.innerHTML = `Edit`;
+                    }
+                    else {
+                        const approve = listing.appendChild(document.createElement('a'));
+                        approve.href = "#";
+                        approve.setAttribute("db_id", store.properties.db_id);
+                        approve.setAttribute("ep", store.properties.date ? 1 : 0);
+                        approve.className = 'btn add-btn-alt mt-2 mr-2';
+                        approve.innerHTML = `Approve`; 
+                    }
+
+                    const del = listing.appendChild(document.createElement('a'));
+                    del.href = "#";
+                    del.setAttribute("db_id", store.properties.db_id);
+                    del.setAttribute("ep", store.properties.date ? 1 : 0);
+                    del.className = 'btn neg-btn mt-2';
+                    del.id = `del-${store.properties.id}`;
+                    del.innerHTML = `Delete`;
+                }
+
+                /**
+                * Listen to the element and when it is clicked, do four things:
+                * 1. Update the `currentFeature` to the store associated with the clicked link
+                * 2. Fly to the point
+                * 3. Close all other popups and display popup for clicked store
+                * 4. Highlight listing in sidebar (and remove highlight for all other listings)
+                **/
+                link.addEventListener('click', function () {
+                    for (const feature of stores.features) {
+                        if (this.id === `link-${feature.properties.id}` && feature.properties.type != 'Online') {
+                            flyToStore(feature);
+                            createPopUp(feature);
+                        }
+                    }
+                    const activeItem = document.getElementsByClassName('active');
+                    if (activeItem[0]) {
+                        activeItem[0].classList.remove('active');
+                    }
+                    this.parentNode.classList.add('active');
+                });
+                
+                if (auth) {
+                    if (type != 3) {
+                        const editButtons = document.querySelectorAll('.btn.add-btn');
+                        editButtons[editButtons.length - 1].addEventListener('click', function(event) {
+                            const btn_id = event.target.getAttribute('db_id');
+                            event.target.getAttribute('ep') == 0 && type == 3 ? type = 4 : type;
+                            const editUrl = `${type}/${btn_id}/update/`;
+                            window.location.href = editUrl;
+                        });
+                    }
+                    else {
+                        const approveButtons = document.querySelectorAll('.btn.add-btn-alt');
+                        approveButtons[approveButtons.length - 1].addEventListener('click', function(event) {
+                            const btn_id = event.target.getAttribute('db_id');
+                            const marker_type = event.target.getAttribute('ep') == 0 ? 'place' : 'event';
+                            const features = stores.features;
+                            for (let i = 0; i < features.length; i++) {
+                                const feature = features[i];
+                                const db_id = feature.properties.db_id;
+                                if (db_id == btn_id && feature.properties.mtype == marker_type) {
+                                    if (feature.properties.cud == 'Create') {
+                                        const data = {
+                                            name: feature.properties.title,
+                                            type: feature.properties.typeno,
+                                            description: feature.properties.description,
+                                            longitude: feature.geometry.coordinates[0],
+                                            latitude: feature.geometry.coordinates[1],
+                                        };
+
+                                        let urlredirect = "";
+                                        if (feature.properties.dateformatted) {
+                                            data.event_date = feature.properties.dateformatted;
+                                            urlredirect = "new-event";
+                                        }
+                                        else {
+                                            urlredirect = "new-place";
+                                        }
+
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.open('POST', urlredirect);
+                                        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                                        xhr.onload = function() {
+                                            if (xhr.status === 200) {
+                                                // Redirect to EventCreateView with the submitted data in the query string
+                                                const params = new URLSearchParams(data).toString();
+                                                window.location.href = `/${profile_id}/markers/${urlredirect}?${params}`;
+                                            } else {
+                                                console.log('Request failed. Status:', xhr.status);
+                                            }
+                                        };
+                                        xhr.send();
+                                    }
+
+                                    else if (feature.properties.cud == 'Update') {
+                                        const data = {
+                                            name: feature.properties.title,
+                                            type: feature.properties.typeno,
+                                            description: feature.properties.description,
+                                            longitude: feature.geometry.coordinates[0],
+                                            latitude: feature.geometry.coordinates[1],
+                                        };
+
+                                        let urlredirect = "";
+                                        const marker_id = feature.properties.marker
+
+                                        if (feature.properties.dateformatted) {
+                                            data.event_date = feature.properties.dateformatted;
+                                            urlredirect = `1/${marker_id}/update/`;
+                                        }
+                                        else {
+                                            urlredirect = `2/${marker_id}/update/`;
+                                        }
+                                        
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.open('POST', urlredirect);
+                                        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                                        xhr.onload = function() {
+                                            if (xhr.status === 200) {
+                                                const redirectUrl = `/${profile_id}/markers/${urlredirect}`;
+                                                const params = new URLSearchParams(data).toString();
+                                                window.location.href = `${redirectUrl}?${params}`;
+                                            } else {
+                                                console.log('Request failed. Status:', xhr.status);
+                                            }
+                                        };
+                                        xhr.send();
+                                    }
+
+                                    else if (feature.properties.cud == 'Delete') {
+                                        let urlredirect = "";
+                                        const marker_id = feature.properties.marker
+
+                                        if (feature.properties.dateformatted) {
+                                            urlredirect = `1/${marker_id}/delete/`;
+                                        }
+                                        else {
+                                            urlredirect = `2/${marker_id}/delete/`;
+                                        }
+                                        
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.open('POST', urlredirect);
+                                        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+                                        xhr.onload = function() {
+                                            if (xhr.status === 200) {
+                                                const redirectUrl = `/${profile_id}/markers/${urlredirect}`;
+                                                window.location.href = `${redirectUrl}`;
+                                            } else {
+                                                console.log('Request failed. Status:', xhr.status);
+                                            }
+                                        };
+                                        xhr.send();
+                                    }
+                                    // add update and delete approve - using connected marker, fix displays for suggestions to accomodate missing info + get info from marker
+                                }
+                            }
+                        });
+                    }
+
+                    const deleteButtons = document.querySelectorAll('.btn.neg-btn');
+                    deleteButtons[deleteButtons.length - 1].addEventListener('click', function(event) {
+                        const btn_id = event.target.getAttribute('db_id');
+                        event.target.getAttribute('ep') == 0 && type == 3 ? type = 4 : type;
+                        const deleteUrl = `${type}/${btn_id}/delete/`;
+                        window.location.href = deleteUrl;
+                    });
+                }
+            }
+        }
+        
+        /**
+        * Use Mapbox GL JS's `flyTo` to move the camera smoothly
+        * a given center point. 
+        **/
+        function flyToStore(currentFeature) {
+            map.flyTo({
+                center: currentFeature.geometry.coordinates,
+                zoom: 18
+            });
+        }
+        
+        /**
+        * Create a Mapbox GL JS `Popup`.
+        **/
+        function createPopUp(currentFeature) {
+            const popUps = document.getElementsByClassName('mapboxgl-popup');
+            if (popUps[0]) popUps[0].remove();
+            const popup = new mapboxgl.Popup({ closeOnClick: true })
+            .setLngLat(currentFeature.geometry.coordinates)
+            .setHTML(
+                `<h6>${currentFeature.properties.title}</h6>
+                <p>${currentFeature.properties.date ? `${currentFeature.properties.date} &middot; ` : '' }${currentFeature.properties.type}</p>
+                <p>${currentFeature.properties.description}</p>`
+            )
+            .addTo(map);
+        }
+        
+
+        function clearListings() {
+            // Remove all listings from the sidebar
+            const listings = document.getElementById('listings');
+            while (listings.childNodes.length > 2) {
+                listings.removeChild(listings.lastChild);
+            }
+
+            // Remove all markers from the map
+            const markers = document.querySelectorAll('[id^="marker-"]');
+            markers.forEach((marker) => {
+                marker.remove();
+            });
+        }
+
+        function updateMap(stores, chosenTypes) {
+            clearListings();
+            let filtered_stores = {
+                "type": "FeatureCollection",
+                "features": []
+            };
+            
+            if (chosenTypes.includes("event") || chosenTypes.includes("place")) {
+                filtered_stores.features = stores.features.filter(marker => 
+                    chosenTypes.includes(marker.properties.mtype)
+                );
+
+                console.log(filtered_stores);
+                buildLocationList(filtered_stores);
+                addMarkers(filtered_stores);
+            }
+
+            else {
+                filtered_stores.features = stores.features.filter(marker => 
+                    chosenTypes.length === 0 || chosenTypes.includes(marker.properties.type)
+                );
+
+                buildLocationList(filtered_stores);
+                addMarkers(filtered_stores);
+            }
+        }
+        
+
+    </script>
+{% endblock content %}

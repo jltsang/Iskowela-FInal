@@ -1,0 +1,227 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - from [1](school_id), hey
+    - from [2](school_id), hello
+    - from [3](school_id), hi
+    - from [4](school_id), hello there
+    - from [5](school_id), good morning
+    - from [6](school_id), good evening
+    - from [7](school_id), moin
+    - from [8](school_id), hey there
+    - from [9](school_id), let's go
+    - from [10](school_id), hey dude
+    - from [11](school_id), goodmorning
+    - from [12](school_id), goodevening
+    - from [2](school_id), good afternoon
+- intent: goodbye
+  examples: |
+    - from [1](school_id), cu
+    - from [2](school_id), good by
+    - from [6](school_id), cee you later
+    - from [4](school_id), good night
+    - from [6](school_id), bye
+    - from [9](school_id), goodbye
+    - from [12](school_id), have a nice day
+    - from [2](school_id), see you around
+    - from [7](school_id), bye bye
+    - from [5](school_id), see you later
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+- intent: what_can_you_do
+  examples: |
+    - from [1](school_id), what can you do?
+    - from [4](school_id), features
+    - from [5](school_id), what are your features?
+    - from [8](school_id), what are your capabilities?
+    - from [6](school_id), how useful are you?
+    - from [2](school_id), what can i use you for?
+    - from [11](school_id), help
+    - from [7](school_id), instructions
+    - from [5](school_id), commands
+    - from [3](school_id), supported features
+- intent: list_scholarships
+  examples: |
+    - from [1](school_id), what scholarships are available?
+    - from [2](school_id), what scholarships are there?
+    - from [1](school_id), what scholarships do you offer?
+    - from [5](school_id), what scholarships can I apply for?
+    - from [1](school_id), list all the scholarships
+    - from [4](school_id), show me all the scholarships
+    - from [3](school_id), view available scholarships
+    - from [2](school_id), which scholarships are currently open for applications?
+    - from [8](school_id), could you provide me with information on the scholarships I'm eligible for?
+    - from [2](school_id), what are the requirements for the scholarships available?
+    - from [4](school_id), are there any merit-based scholarships I can apply for?
+    - from [11](school_id), could you give me an overview of the scholarships offered for international students?
+    - from [1](school_id), what scholarships are specifically available for students majoring in STEM fields?
+    - from [8](school_id), can you provide details on the financial need-based scholarships?
+    - from [7](school_id), are there any scholarships specifically for graduate students?
+    - from [4](school_id), I'm interested in athletic scholarships. Could you provide more information on those?
+    - from [12](school_id), what scholarships are available for minority students?
+- intent: list_processes
+  examples: |
+    - from [1](school_id), what processes are available?
+    - from [1](school_id), what processes are there?
+    - from [4](school_id), what processes do you offer?
+    - from [5](school_id), what processes can I apply for?
+    - from [1](school_id), list all the processes
+    - from [2](school_id), show me all the processes
+    - from [3](school_id), view available processes
+- intent: list_colleges
+  examples: |
+    - from [5](school_id), what colleges are there?
+    - from [1](school_id), what colleges do you offer?
+    - from [2](school_id), what colleges can I apply for?
+    - from [2](school_id), list all the colleges
+    - from [3](school_id), show me all the colleges
+    - from [1](school_id), view available colleges
+    - from [6](school_id), which colleges are available at your institution?
+    - from [9](school_id), could you provide me with information on the colleges you offer?
+    - from [12](school_id), what colleges can I apply to?
+    - from [10](school_id), can you list all the colleges within your institution?
+    - from [5](school_id), show me the colleges available for undergraduate programs.
+    - from [1](school_id), what colleges are specifically focused on arts and humanities?
+    - from [3](school_id), view the colleges offering engineering and technology programs.
+    - from [6](school_id), what colleges are available for business and management studies?
+    - from [8](school_id), I'm interested in health sciences. Can you provide information on the colleges related to that field?
+    - from [2](school_id), which colleges offer programs in social sciences?
+- intent: describe_scholarship
+  examples: |
+    - from [4](school_id), Please give more details about the [Archer Achiever](scholarship_name)
+    - from [1](school_id), I want to know more about the [St. La Salle Grant](scholarship_name)
+    - from [2](school_id), Tell me more about the [Archer Achiever](scholarship_name)
+    - from [2](school_id), Tell me more about the [Mutien Marie Scholarship Grant](scholarship_name)
+    - from [6](school_id), What is the [Archer Achiever](scholarship_name)?
+    - from [1](school_id), Explain in more detail about the [St. La Salle Grant](scholarship_name)
+    - from [7](school_id), I want to know more about the eligibility criteria and benefits of the [St. La Salle Grant](scholarship_name).
+    - from [3](school_id), could you tell me more about the application process and requirements for the [Archer Achiever](scholarship_name)?
+    - from [9](school_id), what are the specific criteria and benefits associated with the [Mutien Marie Scholarship Grant](scholarship_name)?
+    - from [3](school_id), can you provide me with an overview of the [Archer Achiever](scholarship_name) and its significance?
+    - from [8](school_id), I would like a detailed explanation about the purpose and conditions of the [St. La Salle Grant](scholarship_name).
+- intent: describe_process
+  examples: |
+    - from [4](school_id), Please give more details about the [Scholarship Application](process_name)
+    - from [1](school_id), I want to know more about the [Admission Process](process_name)
+    - from [2](school_id), Tell me more about the [Enrollment Process](process_name)
+    - from [2](school_id), Tell me more about the [Application Process](process_name)
+    - from [6](school_id), What is the [Undergraduate Transferee Application Procedures](process_name)?
+    - from [1](school_id), Explain in more detail about the [Freshman Application Procedures Academic Year 2023-2024](process_name)
+    - from [5](school_id), could you please provide more details about the [Scholarship Application](process_name) process?
+    - from [7](school_id), I want to know more about the [Admission Process](process_name) at your institution.
+    - from [8](school_id), could you tell me more about the [Enrollment Process](process_name) for new students?
+    - from [6](school_id), what are the specific steps and requirements involved in the [Application Process](process_name)?
+    - from [9](school_id), can you provide me with an overview of the [Undergraduate Transferee Application Procedures](process_name)?
+    - from [2](school_id), I would like a detailed explanation about the [Freshman Application Procedures Academic Year 2023-2024](process_name) at your institution.
+- intent: list_courses
+  examples: |
+    - from [4](school_id), what courses are offered under the College of [Engineering](college_group)?
+    - from [3](school_id), what degrees can I get in College of [Education](college_group)?
+    - from [2](school_id), show me all the courses in College of [Business](college_group)
+    - from [2](school_id), list all of the courses in College of [Arts](college_group)
+    - from [1](school_id), view all the courses in College of [Science](college_group)
+    - from [5](school_id), what courses are available in College of [Computer Studies](college_group)?
+    - from [8](school_id), could you provide a list of courses offered under the College of [Engineering](college_group)?
+    - from [3](school_id), what degree programs are available in the College of [Education](college_group)?
+    - from [5](school_id), show me all the courses offered in the College of [Business](college_group).
+    - from [9](school_id), can you list all the courses offered in the College of [Arts](college_group)?
+    - from [6](school_id), view the complete list of courses offered in the College of [Science](college_group).
+    - from [1](school_id), what specific courses are available in the College of [Computer Studies](college_group)?
+- intent: apply
+  examples: |
+    - from [1](school_id), how do I apply?
+    - from [3](school_id), how do I get in?
+    - from [4](school_id), what is the application procedure?
+    - from [5](school_id), explain to me the application process
+    - from [3](school_id), could you please guide me on how to apply to your institution?
+    - from [8](school_id), what are the steps I need to follow to get admitted?
+    - from [9](school_id), can you provide details on the application procedure for your school?
+    - from [12](school_id), I would like a thorough explanation of the application process at your institution.
+    - from [7](school_id), what are the requirements and documents needed for the application?
+    - from [8](school_id), how can I submit my application materials?
+    - from [3](school_id), are there any specific deadlines I should be aware of for the application?
+    - from [2](school_id), do you offer an online application option, or is it only through a physical application?
+    - from [5](school_id), are there any additional steps or interviews involved in the application process?
+
+- intent: list_places
+  examples: |
+    - from [1](school_id), what are the places to visit near the campus?
+    - from [3](school_id), what are the places to visit near the campus?
+    - from [4](school_id), what are notable locations in the campus?
+    - from [2](school_id), what landmarks are there near the university?
+    - from [9](school_id), could you provide a list of places to visit near the campus that are worth exploring?
+    - from [5](school_id), what are some of the notable places to visit near the campus that students often enjoy?
+    - from [8](school_id), are there any particular locations within the campus that are considered significant or noteworthy?
+    - from [1](school_id), can you tell me about the landmarks or notable places near the university that are worth visiting?
+    - from [7](school_id), list all the places.
+    - from [6](school_id), tell me all the notable landmarks in the campus.
+    - from [2](school_id), list all locations near the campus.
+    - from [3](school_id), tell me all the notable locations.
+
+- intent: list_places_by_type
+  examples: |
+    - from [1](school_id), are there any [health](place_type) facilities?
+    - from [4](school_id), where can I get some [food](place_type)?
+    - from [3](school_id), what [stores](place_type) are near so for me to but stuff?
+    - from [2](school_id), what [finance](place_type) locations can I withdraw money from?
+    - from [4](school_id), what [other](place_type) landmarks are there near the university?
+    - from [8](school_id), what [health](place_type) facilities are available near the campus where students can seek medical assistance?
+    - from [7](school_id), where can I find [food](place_type) options near the university campus?
+    - from [5](school_id), what [stores](place_type) are located nearby where I can purchase various items and essentials?
+    - from [7](school_id), which [finance](place_type) locations near the university allow students to withdraw money?
+    - from [6](school_id), besides the landmarks mentioned earlier, what [other](place_type) notable places or attractions are there near the university?
+    - from [2](school_id), tell me all the [health](place_type) facilities near the campus.
+    - from [3](school_id), list all the [food](place_type) options near the campus.
+    - from [1](school_id), elaborate on the [stores](place_type) near the campus.
+
+
+- intent: describe_place
+  examples: |
+    - from [1](school_id), can you elaborate on [KFC](place_name)?
+    - from [3](school_id), describe [McDonalds](place_name)?
+    - from [4](school_id), what is [Jollibee](place_name)?
+    - from [2](school_id), give more details on [BDO](place_name).
+    - from [7]](school_id), what is [SMDC Condominium](place_name)?
+    - from [8](school_id), can you tell me more about [Manila Zoo and Botanical Garden](place_name)?
+    - from [5](school_id), can you provide more information and details about [KFC](place_name) located near the campus?
+    - from [10](school_id), please describe [McDonald's](place_name) and its offerings in the vicinity of the campus.
+    - from [6](school_id), what can you tell me about [Jollibee](place_name) and its presence near the university?
+    - from [3](school_id), could you give me additional details on [BDO](place_name) and its services near the campus?
+    - from [2](school_id), what is [SMDC Condominium](place_name) and what features or amenities does it offer?
+    - from [5](school_id), could you provide more information about [Manila Zoo and Botanical Garden](place_name) and what visitors can expect to see there?
+    - from [1](school_id), describe [KFC](place_name).
+    - from [3](school_id), describe [McDonalds](place_name).
+    - from [4](school_id), explain [Jollibee](place_name).
+    - from [2](school_id), give more details on [BDO](place_name).
+
+- intent: list_events
+  examples: |
+    - from [1](school_id), what are the events in the campus?
+    - from [3](school_id), what are the events in the campus?
+    - from [4](school_id), what are the upcoming events?
+    - from [2](school_id), what events are there in the university?
+    - from [9](school_id), could you provide a list of events that are happening in the campus?
+    - from [5](school_id), what are some of the upcoming events that students can look forward to?
+    - from [8](school_id), are there any events that are happening in the campus that are worth attending?
+    - from [1](school_id), can you tell me about the events that are happening in the campus?
+    - from [3](school_id), what are the events that are happening in the campus?
+    - from [4](school_id), tell me about the upcoming events.
+    - from [2](school_id), list all the events in the university.
+
+- intent: describe_event
+    - from [1](school_id), can you elaborate on [Graduation](event_name)?
+    - from [3](school_id), describe [Graduation](event_name).
+    - from [4](school_id), what is [ART IN ACTION FILM SERiES](event_name)?
+    - from [2](school_id), give more details on [Haunted Hall](event_name).
+    - from [7]](school_id), what is [Annual School Fair](event_name)?
+    - from [8](school_id), can you tell me more about [Foundation Day](event_name)?
+    - from [5](school_id), when is the [Haunted Hall](event_name)?
+    - from [10](school_id), what time does the [Annual Fair](event_name) begin?
+    - from [6](school_id), what can you tell me about [Opening Ceremony](event_name)?
+    - from [3](school_id), could you give me additional details on [Graduation](event_name)?

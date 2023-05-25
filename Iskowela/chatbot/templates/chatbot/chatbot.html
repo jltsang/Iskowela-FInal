@@ -1,0 +1,111 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+
+<div class="infobox">
+	<h1 class="d-flex justify-content-center"><b>Chatbot</b></h1>
+    <div id="display" class="chatbot"></div>
+
+    <script>
+        $(document).ready(function(){
+            function scrollToBottom() {
+                var chatbot = document.getElementById("display");
+                chatbot.scrollTop = chatbot.scrollHeight;
+            }
+
+            setInterval(function(){
+                $.ajax({
+                    type: 'GET',
+                    url : "/getMessages/{{user_id}}/",
+                    success: function(response){
+                        console.log(response);
+                        $("#display").empty();
+                        for (var key in response.messages) {
+                            var sender = "You";
+                            if (response.messages[key].is_bot) {
+                                sender = "Bot";
+                            }
+                            var message = response.messages[key].value;
+                            // Replace newlines with <br> tags
+                            message = message.replace(/\n/g, "<br>");
+                            // Add bullet points for multiline answers
+                            if (message.includes("<br>")) {
+                                message = message.replace(/<br>/g, "<br>&bull; ");
+                                message = "&bull; " + message;
+                            }
+                            var temp = "<div class='container darker'><b>" + sender + "</b><p>" + message + "</p><span class='time-left'></span></div>";
+                            $("#display").append(temp);
+                        }
+                        if (response.messages.length > 0) {
+                            scrollToBottom();
+                        }
+                    },
+                    error: function(response){
+                        // alert('An error occurred')
+                    }
+                });
+            }, 1000);
+
+            scrollToBottom();
+        });
+    </script>
+
+
+    <div class="container">
+        <style>
+        input[type=text], select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        }
+
+        input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+
+        input[type=submit]:hover {
+        background-color: #45a049;
+        }
+        </style>
+
+        <form id="post-form">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" id="user_id" value="{{user_id}}"/>
+            <input type="text" name="message" id="message" autocomplete="off" width="100px" />
+            <input type="submit" value="Send">
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $(document).on('submit','#post-form',function(e){
+    e.preventDefault();
+
+    $.ajax({
+      type:'POST',
+      url:'/{{profile_id}}/send/',
+      data:{
+          user_id:$('#user_id').val(),
+          message:$('#message').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+      },
+      success: function(data){
+         //alert(data)
+      }
+    });
+    document.getElementById('message').value = ''
+  });
+</script>
+{% endblock content %}

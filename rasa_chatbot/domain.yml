@@ -1,0 +1,154 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - bot_challenge
+  - what_can_you_do
+  - list_scholarships
+  - list_processes
+  - list_colleges
+  - describe_scholarship
+  - describe_process
+  - list_courses
+  - apply
+  - list_places
+  - list_places_by_type
+  - describe_place
+  - list_events
+  - describe_event
+
+entities:
+  - school_id
+  - scholarship_name
+  - process_name
+  - college_group
+  - place_type
+  - place_name
+  - event_name
+
+slots:
+  school_id:
+    type: float
+    mappings:
+    - type: from_entity
+      entity: school_id
+  scholarship_name:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: scholarship_name
+      intent: describe_scholarship
+  process_name:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: process_name
+      intent: describe_process
+  college_group:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: college_group
+      intent: list_courses
+  place_type:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: place_type
+      intent: list_places_by_type
+  place_name:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: place_name
+      intent: describe_place
+  event_name:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: event_name
+      intent: describe_event
+
+actions:
+- action_list_scholarships
+- action_list_processes
+- action_list_colleges
+- action_describe_scholarship
+- action_describe_process
+- action_list_courses
+- action_apply
+- action_reset_slots
+- action_list_places
+- action_list_places_by_type
+- action_describe_place
+- action_list_events
+- action_describe_event
+
+responses:
+  utter_greet:
+  - text: "Hi!"
+
+  utter_how_can_i_help:
+  - text: How can I help you today?
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_all_list_my_capabilities:
+  - text: "I can help you with the following:
+        \n1. List scholarships
+        \n2. Provide more information on a scholarship
+        \n3. List processes
+        \n4. List colleges
+        \n5. List courses under a college
+        \n6. Provide more information on a process
+        \n7. Provide details on how to apply
+        \n8. List notable landmarks in the campus
+        \n9. Provide more information on a landmark"
+
+  utter_list_scholarships:
+  - text: "Here are the available scholarships:"
+
+  utter_list_processes:
+  - text: "Here are the available processes:"
+
+  utter_list_colleges:
+  - text: "Here are the available colleges:"
+
+  utter_list_courses:
+  - text: "Here are all of the courses under {college_group}:"
+
+  utter_describe_scholarship:
+  - text: "Here are the details of {scholarship_name}:"
+
+  utter_describe_process:
+  - text: "Here's what I found regarding {process_name}:"
+
+  utter_apply:
+  - text: "Here's the details on how to apply:"
+
+  utter_list_places:
+  - text: "Here are the most notable landmarks:"
+
+  utter_list_places_by_type:
+  - text: "Here are the all the {place_types} landmarks in the campus:"
+
+  utter_describe_place:
+  - text: "Here's what I found regarding {place_name}:"
+
+  utter_list_events:
+  - text: "Here are the upcoming events:"
+
+  utter_describe_event:
+  - text: "Here's what I found regarding {event_name}:"
+
+  utter_default:
+  - text: "Sorry, I didn't get that. Can you please rephrase?"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% block content %}
+<div class="row row-cols-3">
+  <div class="col"></div>
+  <div class="col"><div class="text-center"><div class="content-section">
+  		{% load static %}
+  		<!-- <img src="{{ active_profile.logo.url }}" height="200" width="200" alt="Hi!" /> -->
+	    <h3>Roosevelt College CRM</h3><a class="btn btn-primary btn-lg" href="{% url 'main-menu' %}" role="button">GET STARTED</a><br>
+	    {% if not user.is_authenticated %}
+      	<small class="text-muted">
+			<a class="ml-2" href="{% url 'login' %}">Sign In as Admin</a>
+		</small>
+		{% endif %}
+	  </div></div></div>
+</div>
+{% endblock content %}
