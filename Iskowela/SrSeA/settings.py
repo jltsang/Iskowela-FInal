@@ -25,10 +25,9 @@ SECRET_KEY = '1)%0!vgz6(pn*bmwz=r12a%)s!o3qj*b_!ss1bw!drhl$0q+q$'
 # SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["localhost","192.168.1.16", "srsea.herokuapp.com"]
-
+ALLOWED_HOSTS = ["localhost","192.168.1.16", "srsea.herokuapp.com", "https://www.iskowela.live", "https://iskowela.live"]
 
 # Application definition
 
