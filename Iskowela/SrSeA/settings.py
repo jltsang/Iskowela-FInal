@@ -28,7 +28,7 @@ SECRET_KEY = '1)%0!vgz6(pn*bmwz=r12a%)s!o3qj*b_!ss1bw!drhl$0q+q$'
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost","192.168.1.16", "srsea.herokuapp.com"]
-CSRF_TRUSTED_ORIGINS = ['https://*.iskowela.com','http://*.143.198.212.147','http://*.localhost']
+CSRF_TRUSTED_ORIGINS = ['https://*.iskowela.live','http://*.143.198.212.147','http://*.localhost', 'https://www.iskowela.live']
 
 # Application definition
 
