@@ -20,7 +20,18 @@ class SchoolSearchListView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('query')
+        profile_type = self.request.GET.get('type')
+
+        queryset = Profile.objects.all()
+
         if query:
-            return Profile.objects.filter(Q(school_name__icontains=query) | Q(location__icontains=query) | Q(courses__course_list__icontains=query) ).distinct()
-        else:
-            return Profile.objects.all()
+            queryset = queryset.filter(
+                Q(school_name__icontains=query) |
+                Q(location__icontains=query) |
+                Q(courses__course_list__icontains=query)
+            ).distinct()
+
+        if profile_type:
+            queryset = queryset.filter(type=profile_type)
+
+        return queryset
