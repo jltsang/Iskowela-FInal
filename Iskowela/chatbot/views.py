@@ -11,13 +11,8 @@ from django.db.models import Max
 import time
 from django.db.models import Q
 
-
-def index(request, profile_id):
-	get_session(request, profile_id, "chatbot")
-	return render(request, 'chatbot/index.html', {'title': 'Chatbot', 'toggles': Toggles.objects.get(profile = profile_id), 'profile_id': profile_id, 'active_profile': Profile.objects.get(id=profile_id),
-})
-
 def chatbot(request, profile_id):
+	get_session(request, profile_id, "chatbot")
 	user_id = Message.objects.filter(user_id__isnull=False).aggregate(Max('user_id'))['user_id__max']
 	if user_id is None:
 		user_id = 1
