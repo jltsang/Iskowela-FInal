@@ -14,8 +14,10 @@ class SSR(models.Model):
 
 	profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default=None)
 	email = models.EmailField()
-	interactive_map_comment = models.TextField(default='')
-	interactive_map_rating = models.IntegerField(choices=Rating_choices, default=3)
+	information_modules_comment = models.TextField(default='')
+	information_modules_rating = models.IntegerField(choices=Rating_choices, default=3)
+	markers_module_comment = models.TextField(default='')
+	markers_module_rating = models.IntegerField(choices=Rating_choices, default=3)
 	chatbot_comment = models.TextField(default='')
 	chatbot_rating = models.IntegerField(choices=Rating_choices, default=3)
 	overall_comment = models.TextField(default='')

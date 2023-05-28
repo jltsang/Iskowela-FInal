@@ -29,6 +29,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
+from .decorators import toggle_required
 
 urlpatterns = [
     path('', portal_views.SchoolListView.as_view(), name="portal"),
@@ -45,9 +46,9 @@ urlpatterns = [
 
 
     # ---------------------------------------------------------------------------------
-    path('<int:profile_id>/processguides/', information_views.processguide_list, name='processguides'),
-    path('<int:profile_id>/courses/', information_views.course_list, name='courses'),
-    path('<int:profile_id>/scholarships/', information_views.scholarship_list, name='scholarships'),
+    path('<int:profile_id>/processguides/', toggle_required(information_views.processguide_list, "processguides_toggle"), name='processguides'),
+    path('<int:profile_id>/courses/', toggle_required(information_views.course_list, "courses_toggle"), name='courses'),
+    path('<int:profile_id>/scholarships/', toggle_required(information_views.scholarship_list, "scholarships_toggle"), name='scholarships'),
 
     path('<int:profile_id>/processguides/new', login_required(information_views.ProcessGuidesCreateView.as_view()), name='processguide-create'),
     path('<int:profile_id>/courses/new', login_required(information_views.CoursesCreateView.as_view()), name='courses-create'),
@@ -62,7 +63,7 @@ urlpatterns = [
     path('<int:profile_id>/scholarships/delete/<pk>/', login_required(information_views.ScholarshipsDeleteView.as_view()), name='scholarship-delete'),
 
     # ---------------------------------------------------------------------------------
-    path('<int:profile_id>/markers/<int:mtype>', markers_views.markers, name='markers'),
+    path('<int:profile_id>/markers/<int:mtype>', toggle_required(markers_views.markers, "markers_toggle"), name='markers'),
 
     path('<int:profile_id>/markers/new-event', markers_views.EventCreateView.as_view(), name='event-create'),
     path('<int:profile_id>/markers/new-place', markers_views.PlaceCreateView.as_view(), name='place-create'),
@@ -81,7 +82,7 @@ urlpatterns = [
 
     # ---------------------------------------------------------------------------------
     # path('<int:profile_id>/chatbot/', chatbot_views.index, name='chatbot-index'),
-    path('<int:profile_id>/chatbot/', chatbot_views.chatbot, name='chatbot'),
+    path('<int:profile_id>/chatbot/', toggle_required(chatbot_views.chatbot, "chatbot_toggle"), name='chatbot'),
     path('<int:profile_id>/send/', chatbot_views.send, name='send'),
     path('getMessages/<int:user_id>/', chatbot_views.getMessages, name='getMessages'),
 
@@ -92,7 +93,7 @@ urlpatterns = [
     path('<int:profile_id>/ssr/new', ssr_views.SSRCreateView.as_view(), name='ssr-create'),
     path('<int:profile_id>/ssr/<int:pk>/delete/', login_required(ssr_views.SSRDeleteView.as_view()), name='ssr-delete'), #Admin only
 
-    path('<int:profile_id>/analytics/', analytics_views.traffic_monitor, name="analytics"),
+    path('<int:profile_id>/analytics/', toggle_required(analytics_views.traffic_monitor, "web_analytics_toggle"), name="analytics"),
     #path('<int:profile_id>/analytics/monitor/', , name="analytics-monitor"), 
 
     path('queryScholarships/<int:school_id>/', chatbot_views.queryScholarships, name='queryScholarships'),

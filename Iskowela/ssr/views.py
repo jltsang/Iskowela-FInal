@@ -10,6 +10,7 @@ from django.db.models import Avg
 from main.models import Toggles
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+import time
 
 def index(request, profile_id):
 	context = {
@@ -36,7 +37,8 @@ class SSRListView(ListView):
 		context['title'] = 'Stats'
 		
 		# round ratings only if they are not null
-		context['average_imap'] = round(list(SSR.objects.filter(profile=self.kwargs['profile_id']).aggregate(Avg('interactive_map_rating')).values())[0], 2) if SSR.objects.filter(profile=self.kwargs['profile_id']).exists() else None
+		context['average_information'] = round(list(SSR.objects.filter(profile=self.kwargs['profile_id']).aggregate(Avg('information_modules_rating')).values())[0], 2) if SSR.objects.filter(profile=self.kwargs['profile_id']).exists() else None
+		context['average_markers'] = round(list(SSR.objects.filter(profile=self.kwargs['profile_id']).aggregate(Avg('markers_module_rating')).values())[0], 2) if SSR.objects.filter(profile=self.kwargs['profile_id']).exists() else None
 		context['average_chatbot'] = round(list(SSR.objects.filter(profile=self.kwargs['profile_id']).aggregate(Avg('chatbot_rating')).values())[0], 2) if SSR.objects.filter(profile=self.kwargs['profile_id']).exists() else None
 		context['average_overall'] = round(list(SSR.objects.filter(profile=self.kwargs['profile_id']).aggregate(Avg('overall_rating')).values())[0], 2) if SSR.objects.filter(profile=self.kwargs['profile_id']).exists() else None
 		context['count'] = SSR.objects.filter(profile=self.kwargs['profile_id']).count()
@@ -48,7 +50,7 @@ class SSRListView(ListView):
 
 class SSRCreateView(CreateView):
 	model = SSR
-	fields = ['email', 'interactive_map_comment', 'interactive_map_rating', 'chatbot_comment', 'chatbot_rating', 'overall_comment', 'overall_rating']
+	fields = ['email', 'information_modules_comment', 'information_modules_rating', 'markers_module_comment', 'markers_module_rating', 'chatbot_comment', 'chatbot_rating', 'overall_comment', 'overall_rating']
 	
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -60,7 +62,8 @@ class SSRCreateView(CreateView):
 		return context
 
 	def get_success_url(self):
-		return reverse_lazy("ssr-create", kwargs={"profile_id": self.kwargs['profile_id']})
+		return reverse_lazy("main-index", kwargs={"profile_id": self.kwargs['profile_id']})
+	
 	def form_valid(self, form):
 		profile = get_object_or_404(Profile, id=self.kwargs['profile_id'])
 		form.instance.profile = profile

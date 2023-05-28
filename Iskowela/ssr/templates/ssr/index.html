@@ -20,16 +20,27 @@
 		  	  {% endif %}
 		    </div>
 		    
-		    Interactive Map:
+		    Information Modules:
 
-		    <!-- {{ ssr.interactive_map_rating }} -->
-		    {% with ''|center:ssr.interactive_map_rating as range %}
+		    <!-- {{ ssr.information_modules_rating }} -->
+		    {% with ''|center:ssr.information_modules_rating as range %}
 			{% for x in range %}
 			   <span class="fa fa-star checked"></span>
 			{% endfor %}
 			{% endwith %}<br>
 			<p class="text-muted">
-		    {{ ssr.interactive_map_comment }}</p>
+		    {{ ssr.information_modules_comment }}</p>
+
+		    Markers Module:
+
+		    <!-- {{ ssr.markers_module_rating }} -->
+		    {% with ''|center:ssr.markers_module_rating as range %}
+			{% for x in range %}
+			   <span class="fa fa-star checked"></span>
+			{% endfor %}
+			{% endwith %}<br>
+			<p class="text-muted">
+		    {{ ssr.markers_module_comment }}</p>
 
 	    	Chatbot:
 
