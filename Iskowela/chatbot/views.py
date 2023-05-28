@@ -71,12 +71,14 @@ def queryProcessGuides(request, school_id, process_name=None):
 		processes = ProcessGuide.objects.filter(profile=Profile.objects.get(id=school_id))
 		return JsonResponse({"processes":list(processes.values())})
 	else:
-		if process_name is int:
-			process = ProcessGuide.objects.filter(
-				Q(profile=Profile.objects.get(id=school_id)) &
-				Q(apply=process_name)
-			)
-		else:
+		process = None
+		try:
+			if int(process_name):
+				process = ProcessGuide.objects.filter(
+					Q(profile=Profile.objects.get(id=school_id)) &
+					Q(apply=process_name)
+				)
+		except:
 			process = ProcessGuide.objects.filter(
 				Q(profile=Profile.objects.get(id=school_id)) &
 				Q(process_name__icontains=process_name)
