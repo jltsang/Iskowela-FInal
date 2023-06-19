@@ -107,3 +107,14 @@ If you currently do not have Docker installed and would wish to run the modules 
      ```bash
     rasa train
     ```
+
+## Login
+
+* To log in as a super admin which has access to the Django admin page, use the following credentials:
+
+    * Username: admin
+    * Password: srsea123
+
+* The super admin is connected to the school `Roosevelt College Marikina`. To edit information present in other schools, login using their respective accounts.
+
+* Go to Django administration in order to identify the usernames for other accounts. Note that all accounts currently have the same password.
