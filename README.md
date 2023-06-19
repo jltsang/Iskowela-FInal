@@ -112,8 +112,10 @@ If you currently do not have Docker installed and would wish to run the modules 
 
 * To log in as a super admin which has access to the Django admin page, use the following credentials:
 
-    * Username: admin
-    * Password: srsea123
+     ```bash
+    Username: admin
+    Password: srsea123
+    ```
 
 * The super admin is connected to the school `Roosevelt College Marikina`. To edit information present in other schools, login using their respective accounts.
 
